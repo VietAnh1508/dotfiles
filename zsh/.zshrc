@@ -105,11 +105,11 @@ for config (~/.zsh/*.zsh(N)) source $config
 export ANDROID_HOME=$HOME/Library/Android/sdk
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 
-export PATH="$PATH:$HOME/.jenv/bin"
-eval "$(jenv init -)"
+# export PATH="$PATH:$HOME/.jenv/bin"
+# eval "$(jenv init -)"
 
 # Load Angular CLI autocompletion.
-source <(ng completion script)
+# source <(ng completion script)
 
 # pnpm
 export PNPM_HOME="/Users/toah/Library/pnpm"

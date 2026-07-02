@@ -259,11 +259,23 @@ automatically-unhide-macos-hidden-apps = false
 
 [[on-window-detected]]
   if.app-id = 'com.apple.AppStore'
-  run = ['layout floating'] 
+  run = ['layout floating']
+
+[[on-window-detected]]
+  if.app-id = 'com.apple.Passwords'
+  run = ['layout floating']
+
+[[on-window-detected]]
+  if.app-id = 'com.apple.ScreenContinuity'
+  run = ['layout floating']
 
 [[on-window-detected]]
   if.app-id = 'com.brave.Browser'
   run = ['move-node-to-workspace A']
+
+[[on-window-detected]]
+  if.app-id = 'Cisco-Systems.Spark'
+  run = ['move-node-to-workspace B']
 
 [[on-window-detected]]
   if.app-id = 'com.microsoft.VSCode'
@@ -284,6 +296,10 @@ automatically-unhide-macos-hidden-apps = false
 [[on-window-detected]]
   if.app-id = 'notion.id'
   run = ['move-node-to-workspace N']
+
+[[on-window-detected]]
+  if.app-id = 'com.googlecode.iterm2'
+  run = ['move-node-to-workspace T']
 
 [[on-window-detected]]
   if.app-id = 'dev.warp.Warp-Stable'

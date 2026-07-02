@@ -60,10 +60,6 @@ installing something new with `brew bundle dump --file=Brewfile --force`. Only n
 Open `Brewfile` and `brew install`/`cask install` the specific lines you want instead of
 running the whole bundle.
 
-Not tracked here (handle manually if needed on the new machine): yarn globals, Go tools
-(`go install ...`), pip/pipx packages — these were left out on purpose since they're either
-easy to reinstall on demand or not needed on the new machine.
-
 ### VS Code (optional)
 
 Extensions and settings sync via VS Code's built-in **Settings Sync** (sign in with the same
@@ -92,3 +88,4 @@ git:
 - Colima — `~/.ssh/config` previously included `~/.colima/ssh_config`; that line was dropped
   since Colima isn't being set up on the new machine. If that changes, re-add the include
   after Colima has been started at least once (it generates that file itself).
+

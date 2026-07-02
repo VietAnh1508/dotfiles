@@ -43,6 +43,11 @@ Not managed by Stow. In iTerm2: **Preferences → General → Preferences** → 
 "Load preferences from a custom folder or URL" and point it at `~/dotfiles/iterm2`, then
 "Save changes to folder when iTerm2 quits".
 
+The profile's font is **Source Code Pro for Powerline** (`cask "font-source-code-pro-for-powerline"`
+in the Brewfile below). Install it before pointing iTerm2 at this profile, otherwise it
+silently falls back to a system font instead of the powerline glyphs the `agnoster` zsh theme
+needs.
+
 ### Homebrew packages (optional)
 
 ```sh

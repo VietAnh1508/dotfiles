@@ -75,6 +75,8 @@ cask "docker-desktop"
 cask "dotnet-sdk"
 cask "font-hack-nerd-font"
 cask "font-jetbrains-mono-nerd-font"
+# Used by the iTerm2 profile in this repo (Normal Font)
+cask "font-source-code-pro-for-powerline"
 # Standalone app for debugging React Native apps
 cask "react-native-debugger"
 # Move and resize windows using keyboard shortcuts or snap areas

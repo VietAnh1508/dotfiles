@@ -111,6 +111,11 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 # Load Angular CLI autocompletion.
 # source <(ng completion script)
 
+# Homebrew Cask: install apps to ~/Applications instead of /Applications.
+# Needed on machines where the account isn't in the admin group and can't
+# write to /Applications (root:admin, group-writable).
+export HOMEBREW_CASK_OPTS="--appdir=$HOME/Applications"
+
 # pnpm
 export PNPM_HOME="/Users/toah/Library/pnpm"
 case ":$PATH:" in

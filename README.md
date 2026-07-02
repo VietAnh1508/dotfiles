@@ -59,6 +59,13 @@ something new with `brew bundle dump --file=Brewfile --force`. Only need a subse
 `Brewfile` and `brew install`/`cask install` the specific lines you want instead of running the
 whole bundle.
 
+On machines where the account isn't in the `admin` group (e.g. a managed corporate Mac), casks
+fail because they can't copy `.app` bundles into `/Applications` (owned `root:admin`,
+group-writable only by `admin`). `zsh/.zshrc` sets `HOMEBREW_CASK_OPTS="--appdir=$HOME/Applications"`
+to redirect cask installs to `~/Applications` instead, which is user-writable — no admin rights
+needed. This only affects casks; regular formulae are unaffected since `/opt/homebrew` is
+already user-owned.
+
 ### Node.js via pnpm (optional)
 
 Node/npm are **not** installed via Homebrew on this machine — installing them from Homebrew

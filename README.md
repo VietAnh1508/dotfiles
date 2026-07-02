@@ -54,11 +54,32 @@ needs.
 brew bundle install --file=Brewfile
 ```
 
-Installs all brew formulae/casks and the npm globals (`typescript`,
-`typescript-language-server`, `corepack`) captured in `Brewfile`. Regenerate this file after
-installing something new with `brew bundle dump --file=Brewfile --force`. Only need a subset?
-Open `Brewfile` and `brew install`/`cask install` the specific lines you want instead of
-running the whole bundle.
+Installs all brew formulae/casks captured in `Brewfile`. Regenerate this file after installing
+something new with `brew bundle dump --file=Brewfile --force`. Only need a subset? Open
+`Brewfile` and `brew install`/`cask install` the specific lines you want instead of running the
+whole bundle.
+
+### Node.js via pnpm (optional)
+
+Node/npm are **not** installed via Homebrew on this machine — installing them from Homebrew
+(e.g. as a dependency of a cask/formula like `angular-cli`) would place a second `node`/`npm`
+in `/opt/homebrew/bin`, which sits earlier on `PATH` than pnpm's bin dir and would silently
+shadow the pnpm-managed one. Keep Node ownership single-sourced through pnpm:
+
+```sh
+curl -fsSL https://get.pnpm.io/install.sh | sh -
+pnpm env use --global lts
+```
+
+This installs `pnpm` standalone, then has pnpm install and manage its own Node.js version.
+`corepack` isn't needed — it exists to auto-switch package manager versions per-project (mainly
+for npm/yarn); pnpm manages its own version directly (`pnpm self-update`).
+
+Install global npm packages with `pnpm add -g <package>` instead of Homebrew, e.g.:
+
+```sh
+pnpm add -g typescript typescript-language-server
+```
 
 ### VS Code (optional)
 

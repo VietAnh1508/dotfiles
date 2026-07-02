@@ -8,10 +8,6 @@ tap "supabase/tap"
 tap "tursodatabase/tap"
 # Cryptography and SSL/TLS Toolkit
 brew "openssl@3"
-# Open-source, cross-platform JavaScript runtime environment
-brew "node"
-# CLI tool for Angular
-brew "angular-cli"
 # Interpreted, interactive, object-oriented programming language
 brew "python@3.12"
 # Microsoft Azure CLI 2.0
@@ -86,6 +82,3 @@ cask "thaw"
 # Multiplayer code editor
 cask "zed"
 uv "specify-cli"
-npm "corepack"
-npm "typescript-language-server"
-npm "typescript"

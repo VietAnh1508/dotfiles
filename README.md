@@ -8,9 +8,9 @@ directory is a Stow package whose contents mirror the path they should have unde
 
 ```
 dotfiles/
-├── zsh/            stow package → ~/.zshrc, ~/.oh-my-zsh/custom (oh-my-zsh plugins as submodules)
-├── aerospace/       stow package → ~/.config/aerospace/aerospace.toml (tiling WM config)
-├── ssh/             stow package → ~/.ssh/config (config only, never private keys)
+├── zsh/            stow package — shell config (zsh, oh-my-zsh)
+├── aerospace/       stow package — tiling WM config
+├── ssh/             stow package — SSH client config
 ├── iterm2/          NOT a stow package — iTerm2 points its own "custom folder" setting here
 ├── Brewfile         `brew bundle` manifest — formulae, casks, taps
 └── README.md        this file
@@ -41,16 +41,38 @@ Run only the ones you want on this machine — each is independent:
 
 ```sh
 stow aerospace  # ~/.config/aerospace
-stow zsh        # ~/.zshrc, ~/.oh-my-zsh/custom
+stow zsh        # ~/.zshrc, ~/.zprofile, ~/.oh-my-zsh.zsh, ~/.oh-my-zsh/custom
 stow ssh        # ~/.ssh/config
 stow claude     # ~/.claude/CLAUDE.md, ~/.claude/rules/commit-workflow.md, ~/.claude/statusline-command.sh
 ```
 
 `~/.oh-my-zsh` itself must already exist before `stow zsh` (install
 [oh-my-zsh](https://ohmyz.sh/) first) — Stow only symlinks the `custom` subdirectory into it.
-The zsh theme is `agnoster`; `plugins=(git zsh-autosuggestions zsh-syntax-highlighting)` in
-`.zshrc`, with the last two vendored as git submodules under
-`zsh/.oh-my-zsh/custom/plugins/`.
+The zsh theme is `agnoster`; `plugins=(git zsh-autosuggestions zsh-syntax-highlighting)` lives
+in `.oh-my-zsh.zsh` (sourced from `.zshrc`), with the last two plugins vendored as git submodules
+under `zsh/.oh-my-zsh/custom/plugins/`. Framework config (theme, plugins, `source
+$ZSH/oh-my-zsh.sh`) is kept in its own file separate from personal config (secrets loader, cask
+opts) so swapping frameworks later wouldn't touch `.zshrc` itself.
+
+**PATH management:** all PATH entries live in `zsh/.zprofile`, not `.zshrc`. macOS's
+`/etc/zprofile` runs `path_helper` before any user file does, rebuilding PATH from
+`/etc/paths`/`/etc/paths.d/*` and pushing anything already in PATH (e.g. from `.zshenv`,
+which runs *before* `path_helper`) behind that system block — so `.zshenv` is the wrong
+place for PATH entries meant to take precedence. `.zprofile` runs right after `path_helper`,
+once per login shell, which makes it the one place to control both presence and order.
+`.zshrc` runs on every interactive shell (including nested ones — new tmux windows, `exec
+zsh`, etc.), so unconditional appends there accumulate duplicates over a session; every entry
+in `.zprofile` is guarded with the `case ":$PATH:" in ...` dedup pattern for that reason.
+Order in the file is deliberate — pnpm's dir is prepended after Homebrew's so it isn't shadowed
+by a Homebrew-installed node (see the pnpm section below); Python 3.12 is prepended last to
+stay frontmost. `~/.zshrc` itself should only carry interactive-shell config (oh-my-zsh,
+aliases, functions), never PATH.
+
+**Secrets/work-specific config, not tracked here:** `.zshrc` sources every `~/.zsh/*.zsh` file
+via `for config (~/.zsh/*.zsh(N)) source $config`. That directory itself lives outside this
+repo and is never committed — it's where machine- or employer-specific env vars and secrets
+(API tokens, credentials) go, kept off a public repo. Recreate that directory by hand on a new
+machine; nothing here does it for you.
 
 `~/.ssh` must already exist with correct permissions (`chmod 700 ~/.ssh`) before `stow ssh`.
 This only manages `~/.ssh/config` — private keys are never stored in this repo (see Secrets

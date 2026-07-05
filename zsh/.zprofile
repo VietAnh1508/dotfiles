@@ -17,7 +17,7 @@ case ":$PATH:" in
 esac
 
 # cargo / rustup
-. "$HOME/.cargo/env"
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 
 # pnpm — must precede Homebrew's bin dir, otherwise a Homebrew-installed
 # node/npm (e.g. as a cask dependency) would shadow the pnpm-managed one.

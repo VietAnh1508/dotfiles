@@ -11,13 +11,15 @@ dotfiles/
 ├── zsh/            stow package — shell config (zsh, oh-my-zsh)
 ├── aerospace/       stow package — tiling WM config
 ├── ssh/             stow package — SSH client config
+├── claude/          stow package — shareable Claude Code config (CLAUDE.md, rules, statusline)
 ├── iterm2/          NOT a stow package — iTerm2 points its own "custom folder" setting here
 ├── Brewfile         `brew bundle` manifest — formulae, casks, taps
 └── README.md        this file
 ```
 
-Nothing in `~/.claude/` lives in this repo — see [Claude Code configuration](#claude-code-configuration)
-for why, and what's worth copying by hand.
+Only the plain, shareable parts of `~/.claude/` are tracked here (via the `claude` stow package)
+— see [Claude Code configuration](#claude-code-configuration) for what's included and what's
+deliberately left out.
 
 ## Setting up a new machine
 

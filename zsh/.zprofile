@@ -21,10 +21,11 @@ esac
 
 # pnpm — must precede Homebrew's bin dir, otherwise a Homebrew-installed
 # node/npm (e.g. as a cask dependency) would shadow the pnpm-managed one.
+# The node/npm/npx/pnpm shims live in $PNPM_HOME/bin, not $PNPM_HOME itself.
 export PNPM_HOME="$HOME/Library/pnpm"
 case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
+  *":$PNPM_HOME/bin:"*) ;;
+  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
 esac
 
 # Android SDK platform-tools

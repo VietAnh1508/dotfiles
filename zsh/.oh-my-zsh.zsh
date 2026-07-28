@@ -26,10 +26,23 @@ ZSH_THEME="agnoster"
 # Uncomment one of the following lines to change the auto-update behavior
 # zstyle ':omz:update' mode disabled  # disable automatic updates
 # zstyle ':omz:update' mode auto      # update automatically without asking
-# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
+zstyle ':omz:update' mode reminder  # just remind me to update when it's time
 
 # Uncomment the following line to change how often to auto-update (in days).
 # zstyle ':omz:update' frequency 13
+
+# Guard: oh-my-zsh's self-update (git pull/rebase) has been observed replacing
+# $ZSH/custom with a plain directory, silently dropping the zsh-autosuggestions/
+# zsh-syntax-highlighting plugins vendored in dotfiles as the stow-managed symlink.
+# Re-stow automatically if that ever happens again.
+if [[ ! "$HOME/.oh-my-zsh/custom" -ef "$HOME/dotfiles/zsh/.oh-my-zsh/custom" ]]; then
+  echo "[oh-my-zsh] \$ZSH/custom isn't linked into dotfiles — re-running 'stow zsh'..." >&2
+  if (cd "$HOME/dotfiles" 2>/dev/null && command stow -R zsh 2>/dev/null); then
+    echo "[oh-my-zsh] fixed — plugins restored." >&2
+  else
+    echo "[oh-my-zsh] auto-fix failed — run 'stow zsh' in ~/dotfiles manually." >&2
+  fi
+fi
 
 # Uncomment the following line if pasting URLs and other text is messed up.
 # DISABLE_MAGIC_FUNCTIONS="true"

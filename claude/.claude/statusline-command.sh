@@ -4,7 +4,6 @@
 
 input=$(cat)
 cwd=$(echo "$input" | jq -r '.workspace.current_dir')
-transcript_path=$(echo "$input" | jq -r '.transcript_path // empty')
 
 # Model name: "claude-sonnet-4-6" -> "sonnet-4.6"
 model_raw=$(echo "$input" | jq -r '.model.id // .model.display_name // empty')
@@ -87,44 +86,12 @@ if [ -n "$week_used" ]; then
   fi
 fi
 
-# Idle time since last transcript activity (proxy for prompt-cache age).
-# The 1-hour cache TTL resets on every message; once idle time crosses it,
-# the next message reprocesses the full context at full (uncached) cost.
-idle_display=""
-if [ -n "$transcript_path" ] && [ -f "$transcript_path" ]; then
-  last_mtime=$(stat -f %m "$transcript_path" 2>/dev/null || stat -c %Y "$transcript_path" 2>/dev/null)
-  if [ -n "$last_mtime" ]; then
-    now=$(date +%s)
-    idle_secs=$(( now - last_mtime ))
-    if [ "$idle_secs" -lt 0 ]; then idle_secs=0; fi
-    idle_min=$(( idle_secs / 60 ))
-    if [ "$idle_min" -ge 60 ]; then
-      idle_h=$(( idle_min / 60 ))
-      idle_m=$(( idle_min % 60 ))
-      idle_fmt="${idle_h}h${idle_m}m"
-    else
-      idle_fmt="${idle_min}m"
-    fi
-    if [ "$idle_min" -ge 60 ]; then
-      idle_display="🥶 idle ${idle_fmt} — cache expired, next msg reprocesses full context"
-      idle_color="RED"
-    elif [ "$idle_min" -ge 50 ]; then
-      idle_display="⚠️ idle ${idle_fmt} — cache expiring soon"
-      idle_color="YELLOW"
-    else
-      idle_display="💤 idle ${idle_fmt}"
-      idle_color="DIM"
-    fi
-  fi
-fi
-
 # ANSI color codes (subtle)
 RESET='\e[0m'
 DIM='\e[2m'
 CYAN='\e[36m'
 GREEN='\e[32m'
 YELLOW='\e[33m'
-RED='\e[31m'
 
 SEP="$(printf "${DIM}|${RESET}")"
 
@@ -159,15 +126,6 @@ fi
 
 if [ -n "$week_display" ]; then
   parts="${parts} ${SEP} $(printf "${YELLOW}%s${RESET}" "$week_display")"
-fi
-
-if [ -n "$idle_display" ]; then
-  case "$idle_color" in
-    RED) idle_col="$RED" ;;
-    YELLOW) idle_col="$YELLOW" ;;
-    *) idle_col="$DIM" ;;
-  esac
-  parts="${parts} ${SEP} $(printf "${idle_col}%s${RESET}" "$idle_display")"
 fi
 
 printf '%b' "$parts"

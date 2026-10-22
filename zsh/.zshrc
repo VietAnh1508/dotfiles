@@ -40,4 +40,7 @@ for config (~/.zsh/*.zsh(N)) source $config
 # write to /Applications (root:admin, group-writable).
 export HOMEBREW_CASK_OPTS="--appdir=$HOME/Applications"
 
+# Global `npm install -g` binaries (prefix is set in ~/.npmrc).
+export PATH="$HOME/.npm-global/bin:$PATH"
+
 ENABLE_LSP_TOOL=1
